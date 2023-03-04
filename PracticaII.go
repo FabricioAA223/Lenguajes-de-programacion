@@ -13,7 +13,6 @@ type producto struct {
 type listaProductos []producto
 
 var lProductos listaProductos
-var lProductosMinima listaProductos
 
 const existenciaMinima int = 10 //la existencia mínima es el número mínimo debajo de el cual se deben tomar eventuales desiciones
 
@@ -65,21 +64,23 @@ func llenarDatos() {
 	lProductos.agregarProducto("pescado", 13, 3500)
 }
 
-func (l *listaProductos) listarProductosMínimos() {
+func (l *listaProductos) listarProductosMínimos() listaProductos {
+	var listaMinimos listaProductos
 	for i := 0; i < len(*l); i++ {
 		if (*l)[i].cantidad < existenciaMinima {
-			lProductosMinima.agregarProducto((*l)[i].nombre, (*l)[i].cantidad, (*l)[i].precio)
+			listaMinimos.agregarProducto((*l)[i].nombre, (*l)[i].cantidad, (*l)[i].precio)
 		}
 	}
+	return listaMinimos
 	// debe retornar una nueva lista con productos con existencia mínima
 }
 
 // //a.	A partir de la lista de productos con mínimas existencias de inventario, ampliar el inventario
 // con la compra de más unidades de cada producto de esta lista hasta que cumplan con el mínimo establecido.
-func (l *listaProductos) aumentarInventarioDeMinimos() {
-	for i := 0; i < len(lProductosMinima); i++ {
-		index := (*l).buscarProducto(lProductosMinima[i].nombre)
-		(*l)[index].cantidad = existenciaMinima
+func (l *listaProductos) aumentarInventarioDeMinimos(minimos listaProductos) {
+	for i := 0; i < len(minimos); i++ {
+		index := (*l).buscarProducto(minimos[i].nombre)
+		l.agregarProducto((*l)[index].nombre, existenciaMinima-(*l)[index].cantidad, (*l)[index].precio)
 	}
 }
 
@@ -97,9 +98,9 @@ func main() {
 	fmt.Println("Datos iniciales: \n", lProductos)
 	lProductos.venderProducto("café", 12)
 	fmt.Println("\nLuego de vender todas las unidades de cafe: \n", lProductos)
-	lProductos.listarProductosMínimos()
-	fmt.Println("\nProductos por debajo de la cantidad minima: \n", lProductosMinima)
-	lProductos.aumentarInventarioDeMinimos()
+	listaPMinimos := lProductos.listarProductosMínimos()
+	fmt.Println("\nProductos por debajo de la cantidad minima: \n", listaPMinimos)
+	lProductos.aumentarInventarioDeMinimos(listaPMinimos)
 	fmt.Println("\nLista con el inventario aumentado por encima de la cMin: \n", lProductos)
 	lProductos.ordenarProductosXPrecio()
 	fmt.Println("\nLista ordenada de mayor a menor respecto al precio: \n", lProductos)

@@ -18,11 +18,11 @@ let rec miembro1 e l =
     else 
         miembro1 e l.Tail
             
-let filtrarPalabras (pal:string) (lista:string list) =
+let palabras (completa:string list) (contenida:string)=
     lista
     |> List.filter (fun str ->
         let lista1 = str.Split ' ' |> List.ofArray
-        miembro1 pal lista1)
+        miembro1 contenida completa)
        
 // 2)	Construya una función que se llame general-sec A B. Esta función genera una secuencia de números
 // en una lista de A hasta B, donde  A y B son números enteros.
@@ -46,7 +46,7 @@ let calcularMontoFactura = factura |> List.map(fun p -> p.montoVenta) |> List.su
 
 let frases = ["otra cosa";"la rueda";"mejor la otra";"no se cual pala"]
 
-printfn "%A" (filtrarPalabras "la" frases)
+printfn "%A" (palabras frases "la")
 printfn "%A" (generar_sec 1 8)
 
 printfn "Monto de total de impuestos (IVA) %f" (calcularImpuestoFactura)

@@ -18,12 +18,12 @@ let rec miembro1 e l =
     else 
         miembro1 e l.Tail
             
-let palabras (completa:string list) (contenida:string)=
-    lista
-    |> List.filter (fun str ->
-        let lista1 = str.Split ' ' |> List.ofArray
-        miembro1 contenida completa)
-       
+let palabras (completa:string list) (contenida:string) =
+    completa
+    |> List.map(fun word -> List.ofArray(word.Split ' '))
+    |> List.filter (fun charList -> List.contains contenida charList)
+    |> List.map(fun charList -> String.concat " " charList)
+  
 // 2)	Construya una función que se llame general-sec A B. Esta función genera una secuencia de números
 // en una lista de A hasta B, donde  A y B son números enteros.
 
